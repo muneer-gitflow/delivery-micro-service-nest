@@ -1,0 +1,61 @@
+lets work on a nest js  micro service project 
+
+also use better adaptor instead of express
+
+for communication between services use rabbitmq instead of http
+
+
+architecture will be event driven 
+
+clients will be using web sockets  and event polling as fallback
+
+
+add docker compose file to the project
+
+nest js monorepo
+
+the features are we need to have two web sockets / web socket clients 
+one will be customer and other will be delivery boy 
+
+we will have another service which is a simulator which will simulate order pick , on the way with lat and long events 
+
+
+Folder Structure 
+
+delivery-service
+|
++-- .yarn
+|
++-- apps
+|   +-- customer-service
+|   +-- delivery-boy
+|   +-- delivery-service
+|   +-- simulator-service
+|
++-- .cursonrules
++-- .eslintrc.js
++-- .gitignore
++-- .prettierrc
++-- nest-cli.json
++-- package.json
++-- README.md
++-- tsconfig.build.json
++-- tsconfig.json
+
+Rules : 
+use yarn as the main package manager 
+use nestjs monorepo 
+use kafka as the main event streaming service 
+use redis for caching 
+use postgres for the database 
+add docker compose file to the project 
+all services should be in docker containers 
+add docker file for each service 
+mount volumes for each service  so code refreshes every time we make a change 
+on change code it should not require a restart of the service just refresh the docker container
+
+
+Node version in docker file should be 22.9.0-alpine3.20
+
+
+

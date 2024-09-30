@@ -1,0 +1,174 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        APP_NAME: api
+    volumes:
+      - ./apps/api:/usr/src/app/apps/api
+      - ./.yarn:/usr/src/app/.yarn
+      - ./package.json:/usr/src/app/package.json
+      - ./yarn.lock:/usr/src/app/yarn.lock
+      - ./.yarnrc.yml:/usr/src/app/.yarnrc.yml
+    ports:
+      - "3000:3000"
+    depends_on:
+      - customer-service
+      - delivery-boy
+      - delivery-service
+      - simulator-service
+      - kafka
+      - redis
+      - postgres
+    networks:
+      - app-network
+    labels:
+      - "prometheus-scrape.enabled=true"
+      - "prometheus-scrape.port=3000"
+      - "prometheus-scrape.path=/metrics"
+
+  customer-service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        APP_NAME: customer-service
+    volumes:
+      - ./apps/customer-service:/usr/src/app/apps/customer-service
+      - ./.yarn:/usr/src/app/.yarn
+      - ./package.json:/usr/src/app/package.json
+      - ./yarn.lock:/usr/src/app/yarn.lock
+      - ./.yarnrc.yml:/usr/src/app/.yarnrc.yml
+    networks:
+      - app-network
+    labels:
+      - "prometheus-scrape.enabled=true"
+      - "prometheus-scrape.port=3000"
+      - "prometheus-scrape.path=/metrics"
+
+  delivery-boy:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        APP_NAME: delivery-boy
+    volumes:
+      - ./apps/delivery-boy:/usr/src/app/apps/delivery-boy
+      - ./.yarn:/usr/src/app/.yarn
+      - ./package.json:/usr/src/app/package.json
+      - ./yarn.lock:/usr/src/app/yarn.lock
+      - ./.yarnrc.yml:/usr/src/app/.yarnrc.yml
+    networks:
+      - app-network
+    labels:
+      - "prometheus-scrape.enabled=true"
+      - "prometheus-scrape.port=3000"
+      - "prometheus-scrape.path=/metrics"
+
+  delivery-service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        APP_NAME: delivery-service
+    volumes:
+      - ./apps/delivery-service:/usr/src/app/apps/delivery-service
+      - ./.yarn:/usr/src/app/.yarn
+      - ./package.json:/usr/src/app/package.json
+      - ./yarn.lock:/usr/src/app/yarn.lock
+      - ./.yarnrc.yml:/usr/src/app/.yarnrc.yml
+    networks:
+      - app-network
+    labels:
+      - "prometheus-scrape.enabled=true"
+      - "prometheus-scrape.port=3000"
+      - "prometheus-scrape.path=/metrics"
+
+  simulator-service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        APP_NAME: simulator-service
+    volumes:
+      - ./apps/simulator-service:/usr/src/app/apps/simulator-service
+      - ./.yarn:/usr/src/app/.yarn
+      - ./package.json:/usr/src/app/package.json
+      - ./yarn.lock:/usr/src/app/yarn.lock
+      - ./.yarnrc.yml:/usr/src/app/.yarnrc.yml
+    networks:
+      - app-network
+    labels:
+      - "prometheus-scrape.enabled=true"
+      - "prometheus-scrape.port=3000"
+      - "prometheus-scrape.path=/metrics"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - app-network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: delivery_service
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9090:9090"
+    networks:
+      - app-network
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3001:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  prometheus_data:
+  grafana_data:
