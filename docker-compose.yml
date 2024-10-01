@@ -1,77 +1,91 @@
 version: '3.8'
 
 services:
-  api:
-    build:
-      context: ./
-      dockerfile: ./apps/api/Dockerfile
+  #commented out for now , need to enable when running everything via docker
+  # api:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/api/Dockerfile
+  #   ports:
+  #     - '3000:3000'
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/usr/src/app # any change to base folder should be reflected
+  #     - /usr/src/app/node_modules
+  #   command: npx pnpm run start:dev api
+  #   depends_on:
+  #     - kafka
+  #     - customer
+  #     - rabbitmq
+  #   networks:
+  #     - app-network
+  #   labels:
+  #     - "prometheus_scrape_enabled=true"
+  #     - "prometheus_scrape_port=3000"
+  #   environment:
+  #     - SWAGGER_ENABLED=true
+  #     - KAFKA_BROKERS=kafka:29092
+
+  # customer:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/customer/Dockerfile
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/usr/src/app # any change to base folder should be reflected
+  #     - /usr/src/app/node_modules
+  #   command: npx pnpm run start:dev customer
+  #   networks:
+  #     - app-network
+  #   labels:
+  #     - "prometheus_scrape_enabled=true"
+  #     - "prometheus_scrape_port=3000"
+  #   depends_on:
+  #     - kafka
+  #     - rabbitmq
+  #   environment:
+  #     - KAFKA_BROKERS=kafka:29092
+
+  # delivery:
+  #   build:
+  #     context: ./
+  #     dockerfile: ./apps/delivery/Dockerfile
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/usr/src/app # any change to base folder should be reflected
+  #     - /usr/src/app/node_modules
+  #   command: npx pnpm run start:dev delivery
+  #   networks:
+  #     - app-network
+  #   labels:
+  #     - "prometheus_scrape_enabled=true"
+  #     - "prometheus_scrape_port=3000"
+  #   depends_on:
+  #     - kafka
+  #     - rabbitmq
+  #   environment:
+  #     - KAFKA_BROKERS=kafka:29092
+  
+  rabbitmq:
+    image: rabbitmq:4.0.2-management
     ports:
-      - '3000:3000'
-    env_file:
-      - .env
-    volumes:
-      - .:/usr/src/app # any change to base folder should be reflected
-      - /usr/src/app/node_modules
-    command: npx pnpm run start:dev api
-    depends_on:
-      - kafka
-      - customer
+      - "5672:5672"
+      - "15672:15672"  # RabbitMQ Management UI
     networks:
       - app-network
-    labels:
-      - "prometheus_scrape_enabled=true"
-      - "prometheus_scrape_port=3000"
-    environment:
-      - SWAGGER_ENABLED=true
-      - KAFKA_BROKERS=kafka:29092
-
-  customer:
-    build:
-      context: ./
-      dockerfile: ./apps/customer/Dockerfile
-    env_file:
-      - .env
-    volumes:
-      - .:/usr/src/app # any change to base folder should be reflected
-      - /usr/src/app/node_modules
-    command: npx pnpm run start:dev customer
-    networks:
-      - app-network
-    labels:
-      - "prometheus_scrape_enabled=true"
-      - "prometheus_scrape_port=3000"
-    depends_on:
-      - kafka
-    environment:
-      - KAFKA_BROKERS=kafka:29092
-
-  delivery:
-    build:
-      context: ./
-      dockerfile: ./apps/delivery/Dockerfile
-    env_file:
-      - .env
-    volumes:
-      - .:/usr/src/app # any change to base folder should be reflected
-      - /usr/src/app/node_modules
-    command: npx pnpm run start:dev delivery
-    networks:
-      - app-network
-    labels:
-      - "prometheus_scrape_enabled=true"
-      - "prometheus_scrape_port=3000"
-    depends_on:
-      - kafka
-    environment:
-      - KAFKA_BROKERS=kafka:29092
 
   kafka:
     image: confluentinc/cp-kafka:latest
     ports:
       - "9092:9092"
+      - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
@@ -81,8 +95,24 @@ services:
     networks:
       - app-network
 
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    depends_on:
+      - kafka
+      - zookeeper
+    networks:
+      - app-network
+
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000

@@ -1,14 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/delivery/src",
+  "sourceRoot": "apps/api/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/delivery/tsconfig.app.json"
+    "tsConfigPath": "apps/api/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/delivery",
+  "root": "apps/api",
   "projects": {
     "api": {
       "type": "application",
@@ -17,6 +17,15 @@
       "sourceRoot": "apps/api/src",
       "compilerOptions": {
         "tsConfigPath": "apps/api/tsconfig.app.json"
+      }
+    },
+    "customer": {
+      "type": "application",
+      "root": "apps/customer",
+      "entryFile": "main",
+      "sourceRoot": "apps/customer/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/customer/tsconfig.app.json"
       }
     },
     "delivery": {
@@ -28,13 +37,13 @@
         "tsConfigPath": "apps/delivery/tsconfig.app.json"
       }
     },
-    "customer": {
-      "type": "application",
-      "root": "apps/customer",
-      "entryFile": "main",
-      "sourceRoot": "apps/customer/src",
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/customer/tsconfig.app.json"
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
       }
     }
   }
