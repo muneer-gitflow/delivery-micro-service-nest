@@ -16,6 +16,10 @@ import { HealthModule } from './health/health.module';
       driver: ApolloDriver,
       autoSchemaFile: true,
       playground: true,
+      cors: {
+        origin: 'http://localhost:3000',
+        credentials: true,
+      },
     }),
     UsersModule,
     CustomersModule,

@@ -1,19 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  if (process.env.SWAGGER_ENABLED === 'true') {
-    const config = new DocumentBuilder()
-      .setTitle('Delivery API')
-      .setDescription('The Delivery API description')
-      .setVersion('1.0')
-      .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
-  }
+  
+  // Enable CORS
+  app.enableCors({
+    origin: 'http://localhost:3000', // Your Next.js app's URL
+    credentials: true,
+  });
 
   await app.listen(3001);
 }

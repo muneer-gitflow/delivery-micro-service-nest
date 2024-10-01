@@ -1,45 +1,40 @@
 Folder Structure
 
-DELIVERY
+.
 ├── .vscode
-├── apps
-│   ├── api
-│   │   ├── src
-│   │   ├── test
-│   │   ├── Dockerfile
-│   │   └── tsconfig.app.json
-│   ├── customer
-│   │   ├── src
-│   │   ├── test
-│   │   ├── Dockerfile
-│   │   └── tsconfig.app.json
-│   └── delivery
-│       ├── src
-│       ├── test
-│       ├── Dockerfile
-│       └── tsconfig.app.json
-├── dist
-├── node_modules
-├── .dockerignore
-├── .env
-├── .eslintrc.js
-├── .gitignore
-├── .prettierrc.js
-├── docker-compose.yml
-├── nest-cli.json
-├── package.json
-├── pnpm-lock.yaml
-├── README.md
-├── tsconfig.build.json
-└── tsconfig.json
-
-
-
-
-
-
-
-
+├── .yarn
+└── apps
+    ├── api
+    │   ├── src
+    │   ├── Dockerfile
+    │   └── tsconfig.app.json
+    ├── customer
+    │   ├── src
+    │   ├── test
+    │   ├── Dockerfile
+    │   └── tsconfig.app.json
+    ├── delivery
+    │   ├── src
+    │   ├── test
+    │   ├── Dockerfile
+    │   └── tsconfig.app.json
+    └── web
+        ├── .next
+        ├── app
+        ├── components
+        ├── lib
+        ├── node_modules
+        ├── .eslintrc.json
+        ├── .gitignore
+        ├── components.json
+        ├── next-env.d.ts
+        ├── next.config.mjs
+        ├── package.json
+        ├── pnpm-lock.yaml
+        ├── postcss.config.mjs
+        ├── README.md
+        ├── tailwind.config.ts
+        └── tsconfig.json
 
 
 use pnpm as the main package manager
