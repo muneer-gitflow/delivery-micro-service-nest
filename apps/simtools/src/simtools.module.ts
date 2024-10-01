@@ -11,7 +11,6 @@ import { SERVICE_NAMES } from 'libs/shared/service.names';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
     SharedModule,
     TerminusModule,

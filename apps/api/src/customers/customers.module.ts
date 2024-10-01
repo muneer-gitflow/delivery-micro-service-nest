@@ -6,9 +6,7 @@ import { SERVICE_NAMES } from 'libs/shared/service.names';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: '.env',
-    }),
+    ConfigModule.forRoot(),
     SharedModule.registerRmq(
       SERVICE_NAMES.CUSTOMER,
       process.env.RABBITMQ_CUSTOMER_QUEUE,

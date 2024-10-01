@@ -27,11 +27,4 @@ export class CustomerService {
   getCustomers() {
     return this.customers;
   }
-
-  constructor(@Inject('FAN_IN_SERVICE') private fanInClient: ClientProxy) {}
-
-  someMethod() {
-    // ... existing code ...
-    this.fanInClient.emit('customer_event', { /* event data */ });
-  }
 }

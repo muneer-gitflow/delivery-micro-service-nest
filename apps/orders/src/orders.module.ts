@@ -10,7 +10,6 @@ import { OrderService } from './orders.service';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
     SharedModule.registerRmq(
       SERVICE_NAMES.ORDER,

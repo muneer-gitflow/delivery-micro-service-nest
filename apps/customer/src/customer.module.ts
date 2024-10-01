@@ -11,7 +11,6 @@ import { SERVICE_NAMES } from 'libs/shared/service.names';
     SharedModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
     SharedModule.registerRmq(
       SERVICE_NAMES.DELIVERY,

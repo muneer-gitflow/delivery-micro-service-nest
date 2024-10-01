@@ -63,3 +63,8 @@ have redis
 have rabbitmq
 have kafka
 have visualise ui for services
+
+
+Rule :
+version: tag is obsolete in docker compose
+ 
