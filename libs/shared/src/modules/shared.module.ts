@@ -1,18 +1,11 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
-
-import { SharedService } from '../services/shared.service';
+import { SharedConfigService } from '../config/shared-config.service';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: './.env',
-    }),
-  ],
-  providers: [SharedService],
-  exports: [SharedService],
+  imports: [ConfigModule],
+  providers: [SharedConfigService],
 })
 export class SharedModule {
   static registerRmq(service: string, queue: string): DynamicModule {
@@ -30,7 +23,7 @@ export class SharedModule {
               urls: [`amqp://${USER}:${PASSWORD}@${HOST}`],
               queue,
               queueOptions: {
-                durable: true, // queue survives broker restart
+                durable: true,
               },
             },
           });
