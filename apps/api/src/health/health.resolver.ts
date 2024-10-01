@@ -8,7 +8,7 @@ import { HealthCheck } from './health.model';
 export class HealthResolver {
   constructor(
     @Inject('CUSTOMER') private customerService: ClientProxy,
-    // Add other services here as needed
+    @Inject('DELIVERY') private deliveryService: ClientProxy,
   ) {}
 
   @Query(() => HealthCheck)
@@ -26,6 +26,19 @@ export class HealthResolver {
     } catch (error) {
       console.error('Health check failed for customer service:', error);
       return 'Customer service is Unhealthy';
+    }
+  }
+
+  @ResolveField()
+  async delivery(@Parent() healthCheck: HealthCheck): Promise<string> {
+    try {
+      const result = await lastValueFrom(
+        this.deliveryService.send({ cmd: 'delivery_ping' }, {}),
+      );
+      return result;
+    } catch (error) {
+      console.error('Health check failed for delivery service:', error);
+      return 'Delivery service is Unhealthy';
     }
   }
 

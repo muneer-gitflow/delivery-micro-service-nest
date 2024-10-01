@@ -1,22 +1,18 @@
 import { NestFactory } from '@nestjs/core';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { AppModule } from './app.module';
+import { DeliveryModule } from './delivery.module';
+import { SharedConfigService } from '@app/shared/config/shared-config.service';
+import { SharedService } from '@app/shared';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.KAFKA,
-      options: {
-        client: {
-          brokers: ['kafka:29092'],
-        },
-        consumer: {
-          groupId: 'delivery-consumer',
-        },
-      },
-    },
-  );
-  await app.listen();
+  const app = await NestFactory.create(DeliveryModule);
+
+  const configService = app.get(SharedConfigService);
+  const sharedService = app.get(SharedService);
+
+  const queue = configService.get('RABBITMQ_DELIVERY_QUEUE');
+
+  app.connectMicroservice(sharedService.getRmqOptions(queue));
+  await app.startAllMicroservices();
+  console.log('Delivery microservice is running');
 }
 bootstrap();

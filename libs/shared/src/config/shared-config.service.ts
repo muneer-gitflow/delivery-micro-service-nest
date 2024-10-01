@@ -15,6 +15,7 @@ export class SharedConfigService {
       password: this.get<string>('RABBITMQ_PASS'),
       host: this.get<string>('RABBITMQ_HOST'),
       customerQueue: this.get<string>('RABBITMQ_CUSTOMER_QUEUE'),
+      deliveryQueue: this.get<string>('RABBITMQ_DELIVERY_QUEUE'),
     };
   }
 
