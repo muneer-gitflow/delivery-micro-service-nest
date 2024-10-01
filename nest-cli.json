@@ -45,6 +45,14 @@
       "compilerOptions": {
         "tsConfigPath": "libs/shared/tsconfig.lib.json"
       }
+    },
+    "web": {
+      "type": "application",
+      "root": "apps/web",
+      "sourceRoot": "apps/web",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web/tsconfig.json"
+      }
     }
   }
 }

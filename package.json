@@ -1,5 +1,5 @@
 {
-  "name": "delivery",
+  "name": "delivery-monorepo",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -17,7 +17,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/delivery/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/delivery/test/jest-e2e.json",
+    "web:dev": "cd apps/web && npm run dev",
+    "web:build": "cd apps/web && npm run build",
+    "web:start": "cd apps/web && npm run start"
   },
   "dependencies": {
     "@apollo/server": "^4.11.0",
@@ -94,5 +97,9 @@
     "roots": [
       "<rootDir>/apps/"
     ]
-  }
+  },
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ]
 }
