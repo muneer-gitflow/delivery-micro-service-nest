@@ -5,6 +5,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UsersModule } from './users/users.module';
 import { CustomersModule } from './customers/customers.module';
 import { HealthModule } from './health/health.module';
+import { SimtoolsModule } from './simtools/simtools.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -16,14 +18,12 @@ import { HealthModule } from './health/health.module';
       driver: ApolloDriver,
       autoSchemaFile: true,
       playground: true,
-      cors: {
-        origin: 'http://localhost:3000',
-        credentials: true,
-      },
     }),
     UsersModule,
     CustomersModule,
     HealthModule,
+    SimtoolsModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [],

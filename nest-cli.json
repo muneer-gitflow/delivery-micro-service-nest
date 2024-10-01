@@ -53,6 +53,24 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web/tsconfig.json"
       }
+    },
+    "simtools": {
+      "type": "application",
+      "root": "apps/simtools",
+      "entryFile": "main",
+      "sourceRoot": "apps/simtools/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/simtools/tsconfig.app.json"
+      }
+    },
+    "orders": {
+      "type": "application",
+      "root": "apps/orders",
+      "entryFile": "main",
+      "sourceRoot": "apps/orders/src",
+      "compilerOptions": {
+          "tsConfigPath": "apps/orders/tsconfig.app.json"
+      }
     }
   }
 }

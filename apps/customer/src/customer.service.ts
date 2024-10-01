@@ -1,14 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { Customer, OrderStatus } from './dto';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class CustomerService {
-  private customers = [
-    { id: '1', name: 'Alice Johnson', email: 'alice@example.com' },
-    { id: '2', name: 'Bob Smith', email: 'bob@example.com' },
-    { id: '3', name: 'Charlie Brown', email: 'charlie@example.com' },
+  private customers: Customer[] = [
+    {
+      id: '1',
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      phone: '1234567890',
+    },
   ];
+
+  private orderStatuses: Map<string, OrderStatus> = new Map();
+
+  updateOrderStatus(status: OrderStatus) {
+    this.orderStatuses.set(status.orderId, status);
+    console.log(`Updated order status: ${JSON.stringify(status)}`);
+  }
+
+  getOrderStatus(orderId: string): OrderStatus | undefined {
+    return this.orderStatuses.get(orderId);
+  }
 
   getCustomers() {
     return this.customers;
+  }
+
+  constructor(@Inject('FAN_IN_SERVICE') private fanInClient: ClientProxy) {}
+
+  someMethod() {
+    // ... existing code ...
+    this.fanInClient.emit('customer_event', { /* event data */ });
   }
 }

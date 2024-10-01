@@ -1,10 +1,25 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
-export class HealthCheck {
-  @Field(() => String, { nullable: true })
-  customer?: string;
+class SimtoolsHealth {
+  @Field()
+  status: string;
 
-  @Field(() => String, { nullable: true })
-  delivery?: string;
+  @Field()
+  delivery: string;
+}
+
+@ObjectType()
+export class HealthCheck {
+  @Field(() => SimtoolsHealth)
+  simtools: SimtoolsHealth;
+
+  @Field()
+  customer: string;
+
+  @Field()
+  delivery: string;
+
+  @Field()
+  order: string;
 }

@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DeliveryController } from './delivery.controller';
 import { DeliveryService } from './delivery.service';
+import { SERVICE_NAMES } from 'libs/shared/service.names';
 
 @Module({
   imports: [
@@ -11,6 +12,10 @@ import { DeliveryService } from './delivery.service';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    SharedModule.registerRmq(
+      SERVICE_NAMES.DELIVERY,
+      process.env.RABBITMQ_DELIVERY_QUEUE,
+    ),
   ],
   controllers: [DeliveryController],
   providers: [DeliveryService, SharedService],
