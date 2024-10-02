@@ -16,5 +16,6 @@ async function bootstrap() {
   app.connectMicroservice(sharedService.getRmqOptions(queue));
   await app.startAllMicroservices();
   console.log('Order microservice is running');
+  console.log('Hot reload is active. Waiting for changes...');
 }
 bootstrap();

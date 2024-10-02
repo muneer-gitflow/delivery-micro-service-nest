@@ -13,6 +13,6 @@ async function bootstrap() {
 
   app.connectMicroservice(sharedService.getRmqOptions(queue));
   await app.startAllMicroservices();
-  console.log('Delivery microservice is running');
+  console.log('Delivery microservice is running 🚀');
 }
 bootstrap();

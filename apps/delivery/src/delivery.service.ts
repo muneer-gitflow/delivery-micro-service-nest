@@ -7,6 +7,7 @@ export class DeliveryService {
     { id: '1', orderId: 'ORD001', status: 'In Transit' },
     { id: '2', orderId: 'ORD002', status: 'Delivered' },
     { id: '3', orderId: 'ORD003', status: 'Pending' },
+    { id: '4', orderId: 'ORD004', status: 'Pending' },
   ];
 
   getDeliveries() {

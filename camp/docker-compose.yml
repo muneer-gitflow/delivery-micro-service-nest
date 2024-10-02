@@ -5,7 +5,7 @@ services:
     image: supabase/studio:20240729-ce42139
     restart: unless-stopped
     ports:
-      - "4444:3000"
+      - "3000:3000"
     healthcheck:
       test:
         [
@@ -439,7 +439,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ..:/usr/src/app
+      - ../apps/api:/usr/src/app/apps/api
+      - ../libs:/usr/src/app/libs
       - /usr/src/app/node_modules
     command: npx pnpm run start:dev api
     environment:
@@ -455,7 +456,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ..:/usr/src/app
+      - ../apps/customer:/usr/src/app/apps/customer
+      - ../libs:/usr/src/app/libs
       - /usr/src/app/node_modules
     command: npx pnpm run start:dev customer
     environment:
@@ -471,7 +473,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ..:/usr/src/app
+      - ../apps/delivery:/usr/src/app/apps/delivery
+      - ../libs:/usr/src/app/libs
       - /usr/src/app/node_modules
     command: npx pnpm run start:dev delivery
     environment:
@@ -487,14 +490,15 @@ services:
     env_file:
       - .env
     volumes:
-      - ..:/usr/src/app
+      - ../apps/orders:/usr/src/app/apps/orders
+      - ../libs:/usr/src/app/libs
       - /usr/src/app/node_modules
-    command: npx pnpm run start:dev orders
     environment:
       - NODE_ENV=development
     depends_on:
       - rabbitmq
       - redis
+
   simtools:
     build:
       context: ..
@@ -502,12 +506,12 @@ services:
     env_file:
       - .env
     volumes:
-      - ..:/usr/src/app
+      - ../apps/simtools:/usr/src/app/apps/simtools
+      - ../libs:/usr/src/app/libs
       - /usr/src/app/node_modules
     command: npx pnpm run start:dev simtools
     environment:
       - NODE_ENV=development
-    
 
   rabbitmq:
     image: rabbitmq:3-management
